@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import { defineAsyncComponent } from "vue"
+const HomeComponent = defineAsyncComponent({
+  loader: () => import("../components/Home.vue")
+})
+const CardComponent = defineAsyncComponent({ loader: () => import("../components/Card.vue") })
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <section>
+    <HomeComponent>
+      <template v-slot:main>
+        <CardComponent />
+      </template>
+    </HomeComponent>
+  </section>
 </template>

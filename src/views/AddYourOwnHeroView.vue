@@ -1,17 +1,11 @@
 <template>
-  <div class="about">
+  <section>
     <h1 class="text-3xl font-bold underline">
       Add your own hero
     </h1>
-  </div>
+    </section>
 </template>
 
 <style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
+
 </style>
