@@ -11,9 +11,6 @@ const CardDetails = defineAsyncComponent({ loader: () => import("../components/C
   <section>
     <HomeComponent>
       <template v-slot:main>
-        <CardDetails />
-        <br />
-        <CardComponent/>
         <CardComponent />
       </template>
     </HomeComponent>
