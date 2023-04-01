@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { ChangeThemeStyle } from '../shared/utils/ChangeThemeStyle'
 export const useInicialSetup = defineStore('initial-value-setup', {
     state: () => ({
         currentTheme: ''

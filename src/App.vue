@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { defineAsyncComponent, onMounted } from 'vue'
+
+import { useInicialSetup } from './stores/initialSetup'
+
+
+const store = useInicialSetup()
+
+const SwitchButton = defineAsyncComponent({
+  loader: () => import("./components/SwitchButton.vue")
+})
+
+onMounted(() => {
+  store.retrieveLocalTheme()
+});
 
 </script>
 
 <template>
-  <header>
+  <header class="grid grid-cols-2 my-4 dark:bg-gray-700 dark:border-gray-600">
     <nav>
-      <ul>
+      <ul class="grid grid-cols-4">
         <li>
           <RouterLink to="/">Home</RouterLink>
         </li>
@@ -15,11 +29,14 @@ import { RouterLink, RouterView } from 'vue-router'
         </li>
       </ul>
     </nav>
+    <div class="flex flex-row justify-end">
+      <SwitchButton />
+    </div>
   </header>
-  <main>
+  <main class="dark:bg-gray-700 dark:border-gray-600">
     <RouterView />
   </main>
-  <footer class="bg-green-700">
+  <footer class="bg-green-700 dark:bg-gray-700 dark:border-gray-600">
     Developed by Israel Soares.
   </footer>
 </template>
