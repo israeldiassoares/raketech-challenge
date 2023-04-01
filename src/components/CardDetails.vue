@@ -29,7 +29,8 @@
 </template>
 
 <script setup lang="ts">
-
+defineProps<{
+    cardInfoDetails?: string
+}>()
 </script>
 
-<style scoped></style>

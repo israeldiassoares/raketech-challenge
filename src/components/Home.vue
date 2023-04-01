@@ -23,5 +23,3 @@ const SearchInput = defineAsyncComponent({
     loader: () => import("../components/SearchInput.vue")
 })
 </script>
-
-<style scoped></style>

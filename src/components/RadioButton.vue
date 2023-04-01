@@ -119,5 +119,3 @@
 import { useSelectSearchQuery } from '../stores/selectSearch'
 const { selectedParams } = useSelectSearchQuery()
 </script>
-
-<style scoped></style>
