@@ -1,13 +1,13 @@
 <template >
     <a
         href="#"
-        class="transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0"
-        v-for="       character        in getCharacters.results"
+        class=""
+        v-for="character in getCharacters.results"
         :key="character.id"
     >
         <div class="bg-green grid grid-cols-2 gap-2 overflow-hidden">
 
-            <figure class="relative grid grid-cols-1 gap-0">
+            <figure class="relative grid grid-cols-1 gap-0 transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">
                 <img
                     class="rounded-lg max-h-48"
                     :src="character.image"
@@ -16,11 +16,18 @@
             </figure>
             <div class="p-2 flex-initial">
                 <h3> {{ character.name }}</h3>
-                <p class="flex-row"> <span class="bg-green-800 inline-flex p-1.5 rounded-full"> </span> {{ character.status }} - {{ character.gender }}</p>
+                <p class="flex-row"> <span
+                        class="inline-flex p-1.5 rounded-full"
+                        :class="{
+  'bg-green-500': character.status.toLowerCase() === 'alive',
+  'bg-red-500': character.status.toLowerCase() === 'dead',
+  'bg-gray-400': character.status.toLowerCase() === 'unknown'
+                        }"
+                    > </span> {{ character.status }} - {{ character.gender }}</p>
                 <div class="flex-row">
                     <p>Last known location:</p>
                     <template
-                        v-for="       location        in character"
+                        v-for="location in character"
                         :key="character.id"
                     >
                         <p>{{ location.name }}</p>
@@ -29,7 +36,7 @@
                 <div>
                     <p>First seen in:</p>
                     <p
-                        v-for="      origin        in character"
+                        v-for="origin in character"
                         :key="character.id"
                     >{{ origin.name }}</p>
                 </div>
