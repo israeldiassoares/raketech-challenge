@@ -1,15 +1,15 @@
 <template>
     <div class="flex flex-col items-center">
         <!-- Help text -->
-        <span class="text-sm text-gray-700 dark:text-gray-400">
-            Showing <span class="font-semibold text-gray-900 dark:text-white">{{ store.getCurrentNumberPage }}</span> to <span
-                class="font-semibold text-gray-900 dark:text-white">{{ store.getQuantityPage }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ store.getQuantityPage }}</span>
+        <span class="text-sm text-green-700 dark:text-green-400">
+            Showing <span class="font-semibold text-green-900 dark:text-white">{{ store.getCurrentNumberPage }}</span> to <span
+                class="font-semibold text-green-900 dark:text-white">{{ store.getQuantityPage }}</span> of <span class="font-semibold text-green-900 dark:text-white">{{ store.getQuantityPage }}</span>
             Entries
         </span>
         <div class="inline-flex mt-2 xs:mt-0">
             <!-- Buttons -->
             <button
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-800 rounded-l hover:bg-green-900 dark:bg-green-800 dark:border-green-700 dark:text-green-400 dark:hover:bg-green-700 dark:hover:text-white"
                 @click="store.getPrevPageData()"
             >
                 <svg
@@ -28,7 +28,7 @@
                 Prev
             </button>
             <button
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-800 border-0 border-l border-green-700 rounded-r hover:bg-green-900 dark:bg-green-800 dark:border-green-700 dark:text-green-400 dark:hover:bg-green-700 dark:hover:text-white"
                 @click="store.getNextPageData()"
             >
                 Next
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCharacterStore } from '../stores/character'
+import { useCharacterStore } from '../../stores/character'
 const store = useCharacterStore()
 
 </script>

@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useCharacterStore } from '../stores/character'
+import { useCharacterStore } from '../../stores/character'
 const store = useCharacterStore()
 
 let text = ref<string>('')

@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import router from '@/router'
-import { useCharacterStore } from '../stores/character'
+import { useCharacterStore } from '../../stores/character'
 const store = useCharacterStore()
 store.getAllOrFiltredResult()
 

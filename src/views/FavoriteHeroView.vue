@@ -9,7 +9,7 @@ import { useOwnHeroStore } from '../stores/ownHero'
 import { defineAsyncComponent } from "vue"
 
 const HeroCard = defineAsyncComponent({
-    loader: () => import("../components/HeroCard.vue")
+    loader: () => import("../components/molecules/HeroCard.vue")
 })
 
 const store = useOwnHeroStore()

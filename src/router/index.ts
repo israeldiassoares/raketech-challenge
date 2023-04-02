@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/add-your-own-hero',
       name: 'add-your-own-hero',
-      component: () => import('../views/AddYourOwnHeroView.vue')
+      component: () => import('../views/OwnHeroView.vue')
     },
     {
       path: '/character/:id',

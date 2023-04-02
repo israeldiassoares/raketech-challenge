@@ -5,9 +5,9 @@
             <SearchInput />
         </header>
         <section class="grid grid-cols-2 md:grid-cols-2 gap-4 py-4">
-            <slot name="main"> Loading Characters</slot>
+            <CardComponent />
         </section>
-        <footer class="my-4">
+        <footer class="py-4">
             <Pagination />
         </footer>
     </div>
@@ -17,12 +17,14 @@
 import { defineAsyncComponent } from 'vue'
 
 const Pagination = defineAsyncComponent({
-    loader: () => import("../components/Pagination.vue")
+    loader: () => import("../molecules/Pagination.vue")
 })
 const SelectSearchOption = defineAsyncComponent({
-    loader: () => import("../components/RadioButton.vue")
+    loader: () => import("../molecules/RadioButton.vue")
 })
 const SearchInput = defineAsyncComponent({
-    loader: () => import("../components/SearchInput.vue")
+    loader: () => import("../molecules/SearchInput.vue")
 })
+const CardComponent = defineAsyncComponent({ loader: () => import("../molecules/Card.vue") })
+
 </script>

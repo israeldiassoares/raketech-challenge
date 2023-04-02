@@ -2,19 +2,13 @@
 import { defineAsyncComponent } from "vue"
 
 const HomeComponent = defineAsyncComponent({
-  loader: () => import("../components/Home.vue")
+  loader: () => import("../components/organism/OrganismHome.vue")
 })
-const CardComponent = defineAsyncComponent({ loader: () => import("../components/Card.vue") })
 
 </script>
 
 <template>
   <section>
-    <HomeComponent>
-      <template v-slot:main>
-        <CardComponent />
-      </template>
-    </HomeComponent>
-
+    <HomeComponent />
   </section>
 </template>

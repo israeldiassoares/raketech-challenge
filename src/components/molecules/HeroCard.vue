@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useOwnHeroStore } from '../stores/ownHero'
+import { useOwnHeroStore } from '../../stores/ownHero'
 import router from '@/router'
 
 const store = useOwnHeroStore()
 function addFavorite(hero: any) {
-    store.addFavorite(hero)
+    store.saveStateFavoriteHero(hero)
 }
 defineProps<{
     hero: Object
@@ -13,13 +13,12 @@ defineProps<{
 <template>
     <div
         class="bg-green grid grid-cols-2 overflow-hidden max-w-28"
-        v-if="hero.length > 0"
-        v-for=" heroDetails  in hero"
+        v-for="    heroDetails     in store.getListHero"
     >
 
         <a
-            class="my-4"
-            v-if="router.options.history.location.includes('/favorite-hero')"
+            class="py-4"
+            v-if="!router.options.history.location.includes('/favorite-hero')"
             @click="addFavorite(heroDetails)"
         >
             <picture class="relative grid grid-cols-1 gap-0 transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">

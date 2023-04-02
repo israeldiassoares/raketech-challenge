@@ -8,7 +8,7 @@ import { useInicialSetup } from './stores/initialSetup'
 const store = useInicialSetup()
 
 const SwitchButton = defineAsyncComponent({
-  loader: () => import("./components/SwitchButton.vue")
+  loader: () => import("./components/atoms/AtomSwitchButton.vue")
 })
 
 onMounted(() => {
@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <header class="grid grid-cols-2 my-4 dark:bg-gray-700 dark:border-gray-600">
+  <header class="grid grid-cols-2 dark:bg-gray-700 dark:border-gray-600">
     <nav>
       <ul class="grid grid-cols-4">
         <li>
@@ -40,6 +40,10 @@ onMounted(() => {
     <RouterView />
   </main>
   <footer class="bg-green-700 dark:bg-gray-700 dark:border-gray-600">
-    Developed by Israel Soares.
+    <p class="text-sm font-medium text-black dark:text-green-300"> Developed by <a
+        href="https://www.linkedin.com/in/israel-soares-016b1738/"
+        class="text-green-300"
+      >Israel Soares.</a>
+    </p>
   </footer>
 </template>

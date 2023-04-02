@@ -96,7 +96,7 @@
 import { computed, reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
-import { useOwnHeroStore } from '../stores/ownHero'
+import { useOwnHeroStore } from '../../stores/ownHero'
 
 const store = useOwnHeroStore()
 

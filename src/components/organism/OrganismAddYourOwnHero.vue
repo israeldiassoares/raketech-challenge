@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue"
-import { useOwnHeroStore } from '../stores/ownHero'
+import { useOwnHeroStore } from '../../stores/ownHero'
 const store = useOwnHeroStore()
 
 
 const HeroForm = defineAsyncComponent({
-  loader: () => import("../components/HeroForm.vue")
+  loader: () => import("../molecules/HeroForm.vue")
 })
 
 const HeroCard = defineAsyncComponent({
-  loader: () => import("../components/HeroCard.vue")
+  loader: () => import("../molecules/HeroCard.vue")
 })
 
 </script>
 <template>
-  <section class="my-4">
+  <section class="py-4">
     <HeroForm />
   </section>
-  <section class="my-4 grid grid-cols-2 max-w-md">
+  <section class="py-4 grid grid-cols-2 max-w-md">
     <HeroCard :hero="store.getListHero" />
   </section>
 </template>
