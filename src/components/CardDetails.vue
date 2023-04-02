@@ -1,36 +1,40 @@
-<template>
-    <div class="grid grid-cols-2 outline rounded-3xl overflow-hidden">
+<template >
+    <div
+        v-if="cardInfoDetails"
+        class="grid grid-cols-3 outline rounded-3xl overflow-hidden"
+    >
         <picture>
             <img
-                src="../assets/rick.jpeg"
-                alt="profile image character"
+                :src="cardInfoDetails.image"
+                :alt="'profile image ' + cardInfoDetails.name"
             >
         </picture>
-        <table>
-            <caption>Personage Description</caption>
-            <tr>
-                <th>Name:</th>
-                <td>_Rick_</td>
-            </tr>
-            <tr>
-                <th>Status:</th>
-                <td>_Alive_</td>
-            </tr>
-            <tr>
-                <th>Type:</th>
-                <td>_Human_</td>
-            </tr>
-            <tr>
-                <th>Episode:</th>
-                <td>_List_</td>
-            </tr>
-        </table>
+        <ul class="col-span-2">
+            <li class="flex">
+                <p class="text-green-500">Name:</p>
+                <p class="text-green-500">{{ cardInfoDetails.name }}</p>
+            </li>
+            <li class="flex">
+                <p class="text-green-500">Status:</p>
+                <p class="text-green-500">{{ cardInfoDetails.status }}</p>
+            </li>
+            <li class="flex">
+                <p class="text-green-500">Type:</p>
+                <p class="text-green-500">{{ cardInfoDetails.type }}</p>
+            </li>
+            <li>
+                <p class="text-green-500">Episode<span v-if="cardInfoDetails.episode.length > 1">s</span>:</p>
+                <template v-for="      episode          in cardInfoDetails.episode">
+                    <p class="text-green-500">{{ episode }} </p>
+                </template>
+            </li>
+        </ul>
     </div>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-    cardInfoDetails?: string
+    cardInfoDetails?: {}
 }>()
-</script>
 
+</script>

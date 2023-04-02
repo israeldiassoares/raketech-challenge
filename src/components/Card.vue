@@ -1,58 +1,60 @@
 <template >
-    <a
-        href="#"
-        class=""
-        v-for="character in getCharacters.results"
+    <template
+        v-for="              character               in store.getCharacters"
         :key="character.id"
     >
-        <div class="bg-green grid grid-cols-2 gap-2 overflow-hidden">
-
-            <figure class="relative grid grid-cols-1 gap-0 transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">
-                <img
-                    class="rounded-lg max-h-48"
-                    :src="character.image"
-                    alt="rickxpto"
-                >
-            </figure>
-            <div class="p-2 flex-initial">
-                <h3> {{ character.name }}</h3>
-                <p class="flex-row"> <span
-                        class="inline-flex p-1.5 rounded-full"
-                        :class="{
-  'bg-green-500': character.status.toLowerCase() === 'alive',
-  'bg-red-500': character.status.toLowerCase() === 'dead',
-  'bg-gray-400': character.status.toLowerCase() === 'unknown'
-                        }"
-                    > </span> {{ character.status }} - {{ character.gender }}</p>
-                <div class="flex-row">
-                    <p>Last known location:</p>
-                    <template
-                        v-for="location in character"
-                        :key="character.id"
+        <a @click="cardSelected(character.id)">
+            <div class="bg-green grid grid-cols-3 gap-2 overflow-hidden max-w-44">
+                <picture class="relative grid grid-cols-1 gap-0 transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0">
+                    <img
+                        class="rounded-lg max-h-48"
+                        :src="character.image"
+                        :alt="character.name"
                     >
-                        <p>{{ location.name }}</p>
-                    </template>
-                </div>
-                <div>
-                    <p>First seen in:</p>
-                    <p
-                        v-for="origin in character"
-                        :key="character.id"
-                    >{{ origin.name }}</p>
+                </picture>
+                <div class="p-2 flex-initial col-span-2">
+                    <h3> {{ character.name }}</h3>
+                    <p class="flex-row"> <span
+                            class="inline-flex p-1.5 rounded-full"
+                            :class="statusColor(character.status)"
+                        > </span> {{ character.status }} - {{ character.gender }}</p>
+                    <div class="flex-row">
+                        <p>Last known location:</p>
+                        <template
+                            v-for="              location               in character.location"
+                            :key="character.location"
+                        >
+                            <p>{{ location }}</p>
+                        </template>
+                    </div>
+                    <div>
+                        <p>First seen in:</p>
+                        <template v-for="              origin               in character.origin">
+                            <p>{{ origin }}</p>
+                        </template>
+                    </div>
                 </div>
             </div>
-        </div>
-    </a>
+        </a>
+    </template>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import router from '@/router'
 import { useCharacterStore } from '../stores/character'
+const store = useCharacterStore()
+store.fetchCharacters()
 
-const { characters, loading, error, getCharacters } = storeToRefs(useCharacterStore())
-const { fetchCharacters } = useCharacterStore()
-fetchCharacters()
-
+const statusColor = function statusColor(status: string): string {
+    const values = <string | any>{
+        "alive": "bg-green-500",
+        "dead": "bg-red-500",
+        "unknown": "bg-gray-400"
+    }
+    return values[ status.toLocaleLowerCase() ]
+}
+function cardSelected(id: any) {
+    store.fetchCharacterById(id)
+    router.push({ path: `/character/${id}` })
+}
 </script>
-
-<style scoped></style>
