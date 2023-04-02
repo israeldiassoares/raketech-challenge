@@ -1,6 +1,7 @@
+//TODO Card receive props from component superior to become reusable
 <template >
     <template
-        v-for="              character               in store.getCharacters"
+        v-for=" character  in store.getCharacters"
         :key="character.id"
     >
         <a @click="cardSelected(character.id)">
@@ -21,7 +22,7 @@
                     <div class="flex-row">
                         <p>Last known location:</p>
                         <template
-                            v-for="              location               in character.location"
+                            v-for=" location  in character.location"
                             :key="character.location"
                         >
                             <p>{{ location }}</p>
@@ -29,7 +30,7 @@
                     </div>
                     <div>
                         <p>First seen in:</p>
-                        <template v-for="              origin               in character.origin">
+                        <template v-for=" origin  in character.origin">
                             <p>{{ origin }}</p>
                         </template>
                     </div>
@@ -43,7 +44,7 @@
 import router from '@/router'
 import { useCharacterStore } from '../stores/character'
 const store = useCharacterStore()
-store.fetchCharacters()
+store.getAllOrFiltredResult()
 
 const statusColor = function statusColor(status: string): string {
     const values = <string | any>{

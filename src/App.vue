@@ -27,6 +27,9 @@ onMounted(() => {
         <li>
           <RouterLink to="/add-your-own-hero">Add your own hero</RouterLink>
         </li>
+        <li>
+          <RouterLink to="/favorite-hero"> &#10086; Favorite hero</RouterLink>
+        </li>
       </ul>
     </nav>
     <div class="flex flex-row justify-end">
