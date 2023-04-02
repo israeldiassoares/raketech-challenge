@@ -7,7 +7,7 @@
         <section class="grid grid-cols-2 md:grid-cols-2 gap-4 py-4">
             <slot name="main"> Loading Characters</slot>
         </section>
-        <footer>
+        <footer class="my-4">
             <Pagination />
         </footer>
     </div>

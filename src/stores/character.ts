@@ -14,6 +14,8 @@ export const useCharacterStore = defineStore('character', {
         queryParam: '',
         text: '',
         pages: 0,
+        nextPageURL: null,
+        prevPageURL: null,
         loading: false,
         error: String
     }),
@@ -21,8 +23,14 @@ export const useCharacterStore = defineStore('character', {
         getCharacters: (state) => {
             return state.characters.results
         },
-        getNextPagination: (state) => {
-            return state.characters?.info?.next
+        getCurrentNumberPage: (state) => {
+            let next = state?.nextPageURL?.match(/\d/)
+            let prev = state?.prevPageURL?.match(/\d/)
+            if (next == 2 && prev == null) {
+                return 1
+            } else {
+                return next - 1
+            }
         },
         getPrevPagination: (state) => {
             return state.characters?.info?.prev != null ? state.characters?.info?.prev : 'disabled'
@@ -39,6 +47,8 @@ export const useCharacterStore = defineStore('character', {
             this.loading = true
             try {
                 this.characters = await fetch(`${BASE_URL}/character`).then(response => response.json())
+                this.setNextPageURL()
+                this.setPrevPageURL()
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -74,13 +84,6 @@ export const useCharacterStore = defineStore('character', {
                 await this.fetchCharacterById(Number(charID))
             }
         },
-
-        setSelectedParam(inputValue: string): string {
-            return this.queryParam = inputValue
-        },
-        setTextSearch(text: string) {
-            return this.text = text
-        },
         async getFilteredCharacter() {
             this.loading = true
             try {
@@ -91,8 +94,50 @@ export const useCharacterStore = defineStore('character', {
                 this.loading = false
             }
         },
+        async getNextPageData() {
+            console.log('getNextPAge', this.nextPageURL)
+            try {
+                if (this.nextPageURL !== null) {
+                    let nextPageDate = await fetch(`${this.nextPageURL}`).then(response => response.json())
+                    this.setNextPageURL()
+                    this.setPrevPageURL()
+                    this.characters = nextPageDate
+                }
+            } catch (error: any) {
+                this.error = error
+            } finally {
+                this.loading = false
+            }
+        },
+        async getPrevPageData() {
+            console.log('getNextPAge', this.nextPageURL)
+            try {
+                if (this.prevPageURL !== null) {
+                    let prevPageDate = await fetch(`${this.prevPageURL}`).then(response => response.json())
+                    this.setNextPageURL()
+                    this.setPrevPageURL()
+                    this.characters = prevPageDate
+                }
+            } catch (error: any) {
+                this.error = error
+            } finally {
+                this.loading = false
+            }
+        },
+        setSelectedParam(inputValue: string): string {
+            return this.queryParam = inputValue
+        },
+        setTextSearch(text: string) {
+            return this.text = text
+        },
         setQuantityPage() {
             return this.pages = this.characters?.info?.pages
+        },
+        setNextPageURL() {
+            return this.nextPageURL = this.characters?.info?.next
+        },
+        setPrevPageURL() {
+            return this.prevPageURL = this.characters?.info?.prev
         }
     }
 })
