@@ -5,10 +5,14 @@ export default interface CharacterObject {
     info: {},
     results: [ {} ]
 }
+const BASE_URL = 'https://rickandmortyapi.com/api'
+
 export const useCharacterStore = defineStore('character', {
     state: () => ({
         characters: [] as CharacterObject[],
         character: {},
+        queryParam: '',
+        text: '',
         loading: false,
         error: String
     }),
@@ -30,7 +34,7 @@ export const useCharacterStore = defineStore('character', {
         async fetchCharacters(): Promise<void> {
             this.loading = true
             try {
-                this.characters = await fetch('https://rickandmortyapi.com/api/character').then(response => response.json())
+                this.characters = await fetch(`${BASE_URL}/character`).then(response => response.json())
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -39,9 +43,10 @@ export const useCharacterStore = defineStore('character', {
         },
         async fetchCharacterById(id: number) {
             localStorage.setItem('charID', id)
+            this.character = {}
             this.loading = true
             try {
-                this.character = await fetch(`https://rickandmortyapi.com/api/character/${id}`).then(response => response.json())
+                return this.character = await fetch(`${BASE_URL}/character/${id}`).then(response => response.json())
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -51,11 +56,30 @@ export const useCharacterStore = defineStore('character', {
         async retrieveSelectedCharacter() {
             console.log('recupera char', 'length', this.character.length)
             const charID = localStorage?.getItem('charID')
-            if (charID !== null && this.character.length == undefined) {
+            if (charID !== null && this.character.id == undefined) {
                 console.log('recupera if')
                 this.fetchCharacterById(Number(charID))
             }
             console.log('recupera fora')
-        }
+        },
+
+        setSelectedParam(inputValue: string): string {
+            return this.queryParam = inputValue
+        },
+        setTextSearch(text: string) {
+            return this.text = text
+        },
+        async getFilteredCharacter() {
+            if (this.queryParam != 'all')
+                this.loading = true
+            try {
+                this.characters = await fetch(`${BASE_URL}/character/?${this.queryParam}=${this.text}`).then(response => response.json())
+                debugger
+            } catch (error: any) {
+                this.error = error
+            } finally {
+                this.loading = false
+            }
+        },
     }
 })

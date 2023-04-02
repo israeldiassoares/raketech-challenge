@@ -1,7 +1,11 @@
 <template>
     <div class="my-4">
-        <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Filter for</h3>
-        <ul class="flex justify-between">
+        <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Filter by</h3>
+        {{ picked }}
+        <ul
+            class="flex justify-between"
+            @change="setSelectedParam()"
+        >
             <li>
                 <input
                     type="radio"
@@ -9,7 +13,7 @@
                     name="hosting"
                     value="name"
                     class="hidden peer"
-                    required
+                    v-model="picked"
                 >
                 <label
                     for="filter-by-name"
@@ -27,6 +31,7 @@
                     name="hosting"
                     value="status"
                     class="hidden peer"
+                    v-model="picked"
                 >
                 <label
                     for="filter-by-status"
@@ -35,7 +40,6 @@
                     <div class="block">
                         <div class="w-full text-lg font-semibold">Status, is Alive ?</div>
                     </div>
-
                 </label>
             </li>
             <li>
@@ -45,6 +49,7 @@
                     name="hosting"
                     value="species"
                     class="hidden peer"
+                    v-model="picked"
                 >
                 <label
                     for="filter-by-species"
@@ -63,6 +68,7 @@
                     name="hosting"
                     value="type"
                     class="hidden peer"
+                    v-model="picked"
                 >
                 <label
                     for="filter-by-type"
@@ -80,6 +86,7 @@
                     name="hosting"
                     value="gender"
                     class="hidden peer"
+                    v-model="picked"
                 >
                 <label
                     for="filter-by-gender"
@@ -90,32 +97,38 @@
                     </div>
                 </label>
             </li>
-            <button @click="selectedParams($el)">
-                <li>
-                    <input
-                        type="radio"
-                        id="filter-by-all"
-                        name="hosting"
-                        value="all"
-                        class="hidden peer"
-                        @click="selectedParams($el)"
-                    >
-                    <label
-                        for="filter-by-all"
-                        class="inline-flex justify-center w-44 p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-green-500 peer-checked:border-green-600 peer-checked:text-green-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                    >
-                        <div class="block">
-                            <div class="w-full text-lg font-semibold">All</div>
-                        </div>
-                    </label>
-                </li>
-            </button>
+            <li>
+                <input
+                    type="radio"
+                    id="filter-by-all"
+                    name="hosting"
+                    value="all"
+                    class="hidden peer"
+                    v-model="picked"
+                >
+                <label
+                    for="filter-by-all"
+                    class="inline-flex justify-center w-44 p-2 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-green-500 peer-checked:border-green-600 peer-checked:text-green-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                >
+                    <div class="block">
+                        <div class="w-full text-lg font-semibold">All</div>
+                    </div>
+                </label>
+            </li>
         </ul>
 
     </div>
 </template>
 
 <script setup lang="ts">
-import { useSelectSearchQuery } from '../stores/selectSearch'
-const { selectedParams } = useSelectSearchQuery()
+import { ref } from 'vue'
+import { useCharacterStore } from '../stores/character'
+const store = useCharacterStore()
+
+const picked = ref<string>('')
+
+//Emitir para o estado por qual item vai ser pesquisado
+function setSelectedParam() {
+    store.setSelectedParam(picked.value)
+}
 </script>
