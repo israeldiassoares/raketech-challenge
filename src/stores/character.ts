@@ -13,6 +13,7 @@ export const useCharacterStore = defineStore('character', {
         character: {},
         queryParam: '',
         text: '',
+        pages: 0,
         loading: false,
         error: String
     }),
@@ -28,6 +29,9 @@ export const useCharacterStore = defineStore('character', {
         },
         getCharacterDetails: (state) => {
             return state.character
+        },
+        getQuantityPage(state) {
+            return state.pages
         }
     },
     actions: {
@@ -40,6 +44,16 @@ export const useCharacterStore = defineStore('character', {
             } finally {
                 this.loading = false
             }
+        },
+        async getAllOrFiltredResult() {
+            let regexText = '/([aA-zZ])\w+/g'
+            if (this.queryParam.match(regexText) && this.text.match(regexText)) {
+                debugger
+                await this.getFilteredCharacter()
+            } else {
+                await this.fetchCharacters()
+            }
+            this.setQuantityPage()
         },
         async fetchCharacterById(id: number) {
             localStorage.setItem('charID', id)
@@ -54,13 +68,11 @@ export const useCharacterStore = defineStore('character', {
             }
         },
         async retrieveSelectedCharacter() {
-            console.log('recupera char', 'length', this.character.length)
             const charID = localStorage?.getItem('charID')
             if (charID !== null && this.character.id == undefined) {
                 console.log('recupera if')
-                this.fetchCharacterById(Number(charID))
+                await this.fetchCharacterById(Number(charID))
             }
-            console.log('recupera fora')
         },
 
         setSelectedParam(inputValue: string): string {
@@ -70,16 +82,17 @@ export const useCharacterStore = defineStore('character', {
             return this.text = text
         },
         async getFilteredCharacter() {
-            if (this.queryParam != 'all')
-                this.loading = true
+            this.loading = true
             try {
                 this.characters = await fetch(`${BASE_URL}/character/?${this.queryParam}=${this.text}`).then(response => response.json())
-                debugger
             } catch (error: any) {
                 this.error = error
             } finally {
                 this.loading = false
             }
         },
+        setQuantityPage() {
+            return this.pages = this.characters?.info?.pages
+        }
     }
 })

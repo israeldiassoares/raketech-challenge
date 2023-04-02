@@ -7,12 +7,15 @@
         <section class="grid grid-cols-2 md:grid-cols-2 gap-4 py-4">
             <slot name="main"> Loading Characters</slot>
         </section>
-        <Pagination />
+        <footer>
+            <Pagination />
+        </footer>
     </div>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+
 const Pagination = defineAsyncComponent({
     loader: () => import("../components/Pagination.vue")
 })

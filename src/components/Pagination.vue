@@ -2,16 +2,19 @@
     <div class="flex flex-col items-center">
         <!-- Help text -->
         <span class="text-sm text-gray-700 dark:text-gray-400">
-            Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">10</span> of <span
+            Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">{{ store.getQuantityPage }}</span> of <span
                 class="font-semibold text-gray-900 dark:text-white"
-            >100</span> Entries
+            >{{ store.getQuantityPage }}</span> Entries
         </span>
         <div class="inline-flex mt-2 xs:mt-0">
             <!-- Buttons -->
             <button
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-                <a :href="getPrevPagination" :disabled="getPrevPagination">
+                <a
+                    :href="store.getPrevPagination"
+                    :disabled="store.getPrevPagination"
+                >
                     <svg
                         aria-hidden="true"
                         class="w-5 h-5 mr-2"
@@ -30,7 +33,7 @@
             </button>
             <button
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            ><a :href="getNextPagination">
+            ><a :href="store.getNextPagination">
                     Next
 
                     <svg
@@ -53,11 +56,9 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { useCharacterStore } from '../stores/character'
-const { getPrevPagination, getNextPagination } = storeToRefs(useCharacterStore())
-getPrevPagination
-getNextPagination
-</script>
+const store = useCharacterStore()
+store.getPrevPagination
+store.getNextPagination
 
-<style scoped></style>
+</script>
