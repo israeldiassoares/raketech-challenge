@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 export const useOwnHeroStore = defineStore('own-hero', {
     state: () => ({
         heros: [ { imageURL: '', name: '', gender: '' } ],
-        heroFavorite: []
+        heroFavorite: [ { imageURL: '', name: '', gender: '' } ]
     }),
     getters: {
         getListHero(state) {
@@ -15,11 +15,11 @@ export const useOwnHeroStore = defineStore('own-hero', {
         }
     },
     actions: {
-        setNewHero(hero: object) {
+        setNewHero(hero: Hero) {
             this.heros.push({ ...hero })
         },
 
-        addFavorite(hero: object) {
+        addFavorite(hero: Hero) {
             this.heroFavorite.push({ ...hero })
             this.saveStateFavoriteHero(hero)
         },
@@ -36,3 +36,8 @@ export const useOwnHeroStore = defineStore('own-hero', {
         }
     }
 })
+export interface Hero {
+    imageURL: string,
+    name: string,
+    gender: string
+}

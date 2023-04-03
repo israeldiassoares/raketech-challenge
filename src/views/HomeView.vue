@@ -9,8 +9,6 @@ const HomeComponent = defineAsyncComponent({
 
 <template>
   <section>
-    <KeepAlive>
       <HomeComponent />
-    </KeepAlive>
   </section>
 </template>

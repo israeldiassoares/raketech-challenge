@@ -10,28 +10,39 @@ const BASE_URL = 'https://rickandmortyapi.com/api'
 export const useCharacterStore = defineStore('character', {
     state: () => ({
         characters: {
-            info: { prev: '', next: '', pages: '' },
+            info: {
+                "count": 0,
+                "pages": 0,
+                "next": null,
+                "prev": null
+            },
             results: {
-                id: '',
-                image: '',
-                name: '',
-                status: '',
-                gender: '',
-                location: [
-                    { name: '' }
-                ],
-                origin: [ {
-                    name: ''
-                }
-                ]
+                "id": 0,
+                "name": '',
+                "status": '',
+                "species": '',
+                "type": '',
+                "gender": '',
+                "origin": {
+                    "name": '',
+                    "url": ''
+                },
+                "location": {
+                    "name": '',
+                    "url": ''
+                },
+                "image": '',
+                "episode": [ '' ],
+                "url": '',
+                "created": ''
             }
         },
-        character: { name: '', image: '', type: '', status: '', episode: [] },
+        character: { id: Number, name: '', image: '', type: '', status: '', episode: [] },
         queryParam: '',
         text: '',
         pages: 0,
-        nextPageURL: '',
-        prevPageURL: '',
+        nextPageURL: '' || null,
+        prevPageURL: '' || null,
         loading: false,
         error: String
     }),
@@ -39,9 +50,9 @@ export const useCharacterStore = defineStore('character', {
         getCharacters: (state) => {
             return state.characters.results
         },
-        getCurrentNumberPage: (state) => {
-            let next = Number(state?.nextPageURL?.match(/\d/))
-            let prev = String(state?.prevPageURL?.match(/\d/))
+        getCurrentNumberPage: (state: any) => {
+            let next = Number(state.nextPageURL?.match(/\d/))
+            let prev = String(state.prevPageURL?.match(/\d/))
             if (next === 2 && prev == '') {
                 return 1
             } else {
@@ -82,8 +93,7 @@ export const useCharacterStore = defineStore('character', {
             this.setQuantityPage()
         },
         async fetchCharacterById(id: number) {
-            localStorage.setItem('charID', id)
-            this.character = {}
+            localStorage.setItem('charID', String(id))
             this.loading = true
             try {
                 return this.character = await fetch(`${BASE_URL}/character/${id}`).then(response => response.json())
@@ -157,3 +167,34 @@ export const useCharacterStore = defineStore('character', {
         }
     }
 })
+
+export interface Response {
+    info: {
+        "count": number,
+        "pages": number,
+        "next": string | null,
+        "prev": string | null
+    },
+    results: {
+        "id": number,
+        "name": string,
+        "status": string,
+        "species": string,
+        "type": string,
+        "gender": string,
+        "origin": {
+            "name": string,
+            "url": string
+        },
+        "location": {
+            "name": string,
+            "url": string
+        },
+        "image": string,
+        "episode": [ string
+
+        ],
+        "url": string,
+        "created": string
+    }
+}
