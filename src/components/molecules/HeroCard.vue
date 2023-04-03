@@ -12,12 +12,12 @@ defineProps<{
 </script>
 <template>
     <div
-        class="bg-green grid grid-cols-2 overflow-hidden max-w-28"
-        v-for="    heroDetails     in store.getListHero"
+        class="bg-green overflow-hidden max-w-28"
+        v-for=" heroDetails  in store.getListHero"
     >
 
         <a
-            class="py-4"
+            class="py-4 grid grid-cols-2"
             v-if="!router.options.history.location.includes('/favorite-hero')"
             @click="addFavorite(heroDetails)"
         >
@@ -28,10 +28,15 @@ defineProps<{
                     :alt="heroDetails.name"
                 >
             </picture>
-            <div class="p-2 flex-initial">
-                <h3> Hero Name: {{ heroDetails.name }}</h3>
-                <p class="flex-row"> <span class="inline-flex p-1.5 rounded-full"> </span>{{ heroDetails.gender }}</p>
-
+            <div>
+                <div class="p-2 flex">
+                    <h3> Hero Name: </h3>
+                    <p> {{ heroDetails.name }}</p>
+                </div>
+                <div class="p-2 flex">
+                    <h3>Gender: </h3>
+                    <p class="flex-row"> {{ heroDetails.gender }}</p>
+                </div>
             </div>
         </a>
     </div>

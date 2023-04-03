@@ -17,7 +17,7 @@ const HeroCard = defineAsyncComponent({
   <section class="py-4">
     <HeroForm />
   </section>
-  <section class="py-4 grid grid-cols-2 max-w-md">
+  <section class="py-4 grid grid-cols-4">
     <HeroCard :hero="store.getListHero" />
   </section>
 </template>
