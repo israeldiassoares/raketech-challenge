@@ -9,7 +9,7 @@ const BASE_URL = 'https://rickandmortyapi.com/api'
 
 export const useCharacterStore = defineStore('character', {
     state: () => ({
-        characters: {
+        characters: [ {
             info: {
                 "count": 0,
                 "pages": 0,
@@ -36,7 +36,7 @@ export const useCharacterStore = defineStore('character', {
                 "url": '',
                 "created": ''
             }
-        },
+        } ],
         character: { id: Number, name: '', image: '', type: '', status: '', episode: [] },
         queryParam: '',
         text: '',
@@ -48,7 +48,13 @@ export const useCharacterStore = defineStore('character', {
     }),
     getters: {
         getCharacters: (state) => {
-            return state.characters.results
+            let resultChar: any
+            for (let item in state.characters) {
+                if (item == 'results') {
+                    resultChar = state.characters[ item ]
+                }
+            }
+            return resultChar
         },
         getCurrentNumberPage: (state: any) => {
             let next = Number(state.nextPageURL?.match(/\d/))
@@ -60,7 +66,12 @@ export const useCharacterStore = defineStore('character', {
             }
         },
         getPrevPagination: (state) => {
-            return state.characters?.info?.prev != null ? state.characters?.info?.prev : 'disabled'
+            let prevPage = ''
+            for (let item in state.characters) {
+                if (item == 'info') {
+                    return state.characters[ item ]
+                }
+            }
         },
         getCharacterDetails: (state) => {
             return state.character
@@ -157,13 +168,31 @@ export const useCharacterStore = defineStore('character', {
             return this.text = text
         },
         setQuantityPage() {
-            return this.pages = Number(this.characters?.info?.pages)
+            let pages: any
+            for (let info in this.characters) {
+                if (info == 'info') {
+                    pages = info
+                }
+            }
+            return this.pages = Number(pages.pages)
         },
         setNextPageURL() {
-            return this.nextPageURL = this.characters?.info?.next
+            let nextUrl = <any>{}
+            for (let info in this.characters) {
+                if (info == 'info') {
+                    nextUrl = info
+                }
+            }
+            return this.nextPageURL = nextUrl
         },
         setPrevPageURL() {
-            return this.prevPageURL = this.characters?.info?.prev
+            let url = <any>{}
+            for (let info in this.characters) {
+                if (info == 'info') {
+                    url = info
+                }
+            }
+            return this.prevPageURL = url
         }
     }
 })
