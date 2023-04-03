@@ -1,30 +1,28 @@
 <template >
     <div
-        v-if="cardInfoDetails"
-        class="grid grid-cols-3 outline rounded-3xl overflow-hidden"
+        v-if="store.getCharacterDetails"
+        class="grid grid-cols-3 rounded-3xl overflow-hidden"
     >
         <picture>
             <img
-                :src="cardInfoDetails.image"
-                :alt="'profile image ' + cardInfoDetails.name"
+                :src="(store.getCharacterDetails.image)"
+                :alt="'profile image ' + store.getCharacterDetails.name"
             >
         </picture>
         <ul class="col-span-2">
-            <li class="flex">
-                <p class="text-green-500">Name:</p>
-                <p class="text-green-500">{{ cardInfoDetails.name }}</p>
-            </li>
+
+            <h1 class="text-green-500"> {{ store.getCharacterDetails.name }}</h1>
             <li class="flex">
                 <p class="text-green-500">Status:</p>
-                <p class="text-green-500">{{ cardInfoDetails.status }}</p>
+                <p class="text-green-500">{{ store.getCharacterDetails.status }}</p>
             </li>
             <li class="flex">
                 <p class="text-green-500">Type:</p>
-                <p class="text-green-500">{{ cardInfoDetails.type }}</p>
+                <p class="text-green-500">{{ store.getCharacterDetails.type }}</p>
             </li>
             <li>
-                <p class="text-green-500">Episode<span v-if="cardInfoDetails.episode.length > 1">s</span>:</p>
-                <template v-for="      episode          in cardInfoDetails.episode">
+                <p class="text-green-500">Episodes:</p>
+                <template v-for=" episode  in store.getCharacterDetails.episode">
                     <p class="text-green-500">{{ episode }} </p>
                 </template>
             </li>
@@ -33,8 +31,9 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-    cardInfoDetails?: {}
-}>()
+import { useCharacterStore } from "../../stores/character"
+
+const store = useCharacterStore()
+
 
 </script>

@@ -9,13 +9,29 @@ const BASE_URL = 'https://rickandmortyapi.com/api'
 
 export const useCharacterStore = defineStore('character', {
     state: () => ({
-        characters: [] as CharacterObject[],
-        character: {},
+        characters: {
+            info: { prev: '', next: '', pages: '' },
+            results: {
+                id: '',
+                image: '',
+                name: '',
+                status: '',
+                gender: '',
+                location: [
+                    { name: '' }
+                ],
+                origin: [ {
+                    name: ''
+                }
+                ]
+            }
+        },
+        character: { name: '', image: '', type: '', status: '', episode: [] },
         queryParam: '',
         text: '',
         pages: 0,
-        nextPageURL: null,
-        prevPageURL: null,
+        nextPageURL: '',
+        prevPageURL: '',
         loading: false,
         error: String
     }),
@@ -24,9 +40,9 @@ export const useCharacterStore = defineStore('character', {
             return state.characters.results
         },
         getCurrentNumberPage: (state) => {
-            let next = state?.nextPageURL?.match(/\d/)
-            let prev = state?.prevPageURL?.match(/\d/)
-            if (next == 2 && prev == null) {
+            let next = Number(state?.nextPageURL?.match(/\d/))
+            let prev = String(state?.prevPageURL?.match(/\d/))
+            if (next === 2 && prev == '') {
                 return 1
             } else {
                 return next - 1
@@ -131,7 +147,7 @@ export const useCharacterStore = defineStore('character', {
             return this.text = text
         },
         setQuantityPage() {
-            return this.pages = this.characters?.info?.pages
+            return this.pages = Number(this.characters?.info?.pages)
         },
         setNextPageURL() {
             return this.nextPageURL = this.characters?.info?.next

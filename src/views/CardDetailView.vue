@@ -13,6 +13,6 @@ onMounted(() => {
 
 <template>
     <section>
-        <CardDetails :cardInfoDetails="store.getCharacterDetails" />
+        <CardDetails />
     </section>
 </template>
