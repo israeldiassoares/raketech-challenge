@@ -16,11 +16,13 @@ const router = createRouter({
     },
     {
       path: '/character/:id',
+      name: 'charater-by-id',
       component: () => import('../views/CardDetailView.vue')
 
     },
     {
       path: '/favorite-hero',
+      name: 'favorite-hero',
       component: () => import('../views/FavoriteHeroView.vue')
 
     }
