@@ -1,11 +1,12 @@
 <template>
     <div>
         <label class="relative inline-flex items-center cursor-pointer">
+            <span class="mr-3 text-sm font-medium text-green-900 dark:text-green-300">Light</span>
             <input
                 type="checkbox"
                 value=""
                 class="sr-only peer"
-                checked
+                :checked="(store.getCurrentTheme == 'light')"
                 @click="store.toggleTheme()"
             >
             <div

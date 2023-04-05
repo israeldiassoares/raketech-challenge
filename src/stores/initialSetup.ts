@@ -1,29 +1,34 @@
 import { defineStore } from 'pinia'
 export const useInicialSetup = defineStore('initial-value-setup', {
     state: () => ({
-        currentTheme: ''
+        theme: ''
     }),
+    getters: {
+        getCurrentTheme(state) {
+            return state.theme
+        }
+    },
 
     actions: {
         retrieveLocalTheme(): void {
-            const theme = localStorage?.getItem('theme')
+            const theme = localStorage?.getItem('retrieveTheme')
             if (theme !== null) {
-                this.currentTheme = theme
+                this.theme = theme
                 this.toggleTheme()
             } else {
-                localStorage.setItem('theme', "light")
+                localStorage.setItem('retrieveTheme', "light")
             }
         },
 
         toggleTheme() {
-            if (this.currentTheme === "light" || (!(this.currentTheme in localStorage) && window.matchMedia(`(prefers-color-scheme: dark)`).matches)) {
-                localStorage.setItem('theme', 'light')
+            if (this.theme === "light") {
+                localStorage.setItem('retrieveTheme', 'light')
                 document.documentElement.classList.remove('dark')
-                this.currentTheme = 'dark'
+                this.theme = 'dark'
             } else {
-                localStorage.setItem('theme', 'dark')
+                localStorage.setItem('retrieveTheme', 'dark')
                 document.documentElement.classList.add('dark')
-                this.currentTheme = 'light'
+                this.theme = 'light'
             }
         }
     }
