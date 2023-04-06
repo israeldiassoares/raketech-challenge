@@ -1,0 +1,1 @@
+import{a as o,h as n,c as a,g as r,t as s,N as c}from"./vendor-29a55132.js";const p=o({__name:"AtomButton",props:{textButton:String},setup(t){return(e,l)=>(n(),a("button",null,[r(s(t.textButton)+" ",1),c(e.$slots,"icon")]))}});export{p as default};
