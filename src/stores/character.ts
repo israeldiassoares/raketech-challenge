@@ -1,5 +1,4 @@
-
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
 export default interface CharacterObject {
     info: {},
@@ -9,49 +8,23 @@ const BASE_URL = 'https://rickandmortyapi.com/api'
 
 export const useCharacterStore = defineStore('character', {
     state: () => ({
-        characters: [ {
-            info: {
-                "count": 0,
-                "pages": 0,
-                "next": null,
-                "prev": null
-            },
-            results: {
-                "id": 0,
-                "name": '',
-                "status": '',
-                "species": '',
-                "type": '',
-                "gender": '',
-                "origin": {
-                    "name": '',
-                    "url": ''
-                },
-                "location": {
-                    "name": '',
-                    "url": ''
-                },
-                "image": '',
-                "episode": [ '' ],
-                "url": '',
-                "created": ''
-            }
-        } ],
-        character: { id: Number, name: '', image: '', type: '', status: '', episode: [] },
+        charactersList: [] as Response[],
+        character: {} as Character,
         queryParam: '',
         text: '',
         pages: 0,
         nextPageURL: '' || null,
         prevPageURL: '' || null,
         loading: false,
-        error: String
+        error: String,
+        favoriteHeroList: [] as Hero[]
     }),
     getters: {
-        getCharacters: (state) => {
+        getCharactersList: (state) => {
             let resultChar: any
-            for (let item in state.characters) {
+            for (let item in state.charactersList) {
                 if (item == 'results') {
-                    resultChar = state.characters[ item ]
+                    resultChar = state.charactersList[ item ]
                 }
             }
             return resultChar
@@ -67,9 +40,9 @@ export const useCharacterStore = defineStore('character', {
         },
         getPrevPagination: (state) => {
             let prevPage = ''
-            for (let item in state.characters) {
+            for (let item in state.charactersList) {
                 if (item == 'info') {
-                    return state.characters[ item ]
+                    return state.charactersList[ item ]
                 }
             }
         },
@@ -78,13 +51,27 @@ export const useCharacterStore = defineStore('character', {
         },
         getQuantityPage(state) {
             return state.pages
+        },
+        getFavoriteHeroList(state) {
+            return state.favoriteHeroList
         }
     },
     actions: {
+        async getAllOrFiltredResult() {
+            let regexText = '/([aA-zZ])\w+/g'
+            if (this.queryParam.match(regexText) && this.text.match(regexText)) {
+
+                await this.getFilteredCharacter()
+            } else {
+                await this.fetchCharacters()
+            }
+            this.setQuantityPage()
+        },
         async fetchCharacters(): Promise<void> {
             this.loading = true
             try {
-                this.characters = await fetch(`${BASE_URL}/character`).then(response => response.json())
+                this.charactersList = await fetch(`${BASE_URL}/character`).then(response => response.json())
+
                 this.setNextPageURL()
                 this.setPrevPageURL()
             } catch (error: any) {
@@ -92,16 +79,6 @@ export const useCharacterStore = defineStore('character', {
             } finally {
                 this.loading = false
             }
-        },
-        async getAllOrFiltredResult() {
-            let regexText = '/([aA-zZ])\w+/g'
-            if (this.queryParam.match(regexText) && this.text.match(regexText)) {
-                debugger
-                await this.getFilteredCharacter()
-            } else {
-                await this.fetchCharacters()
-            }
-            this.setQuantityPage()
         },
         async fetchCharacterById(id: number) {
             localStorage.setItem('charID', String(id))
@@ -114,17 +91,10 @@ export const useCharacterStore = defineStore('character', {
                 this.loading = false
             }
         },
-        async retrieveSelectedCharacter() {
-            const charID = localStorage?.getItem('charID')
-            if (charID !== null && this.character.id == undefined) {
-                console.log('recupera if')
-                await this.fetchCharacterById(Number(charID))
-            }
-        },
         async getFilteredCharacter() {
             this.loading = true
             try {
-                this.characters = await fetch(`${BASE_URL}/character/?${this.queryParam}=${this.text}`).then(response => response.json())
+                this.charactersList = await fetch(`${BASE_URL}/character/?${this.queryParam}=${this.text}`).then(response => response.json())
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -138,7 +108,7 @@ export const useCharacterStore = defineStore('character', {
                     let nextPageDate = await fetch(`${this.nextPageURL}`).then(response => response.json())
                     this.setNextPageURL()
                     this.setPrevPageURL()
-                    this.characters = nextPageDate
+                    this.charactersList = nextPageDate
                 }
             } catch (error: any) {
                 this.error = error
@@ -153,7 +123,7 @@ export const useCharacterStore = defineStore('character', {
                     let prevPageDate = await fetch(`${this.prevPageURL}`).then(response => response.json())
                     this.setNextPageURL()
                     this.setPrevPageURL()
-                    this.characters = prevPageDate
+                    this.charactersList = prevPageDate
                 }
             } catch (error: any) {
                 this.error = error
@@ -161,15 +131,9 @@ export const useCharacterStore = defineStore('character', {
                 this.loading = false
             }
         },
-        setSelectedParam(inputValue: string): string {
-            return this.queryParam = inputValue
-        },
-        setTextSearch(text: string) {
-            return this.text = text
-        },
         setQuantityPage() {
             let pages: any
-            for (let info in this.characters) {
+            for (let info in this.charactersList) {
                 if (info == 'info') {
                     pages = info
                 }
@@ -178,7 +142,8 @@ export const useCharacterStore = defineStore('character', {
         },
         setNextPageURL() {
             let nextUrl = <any>{}
-            for (let info in this.characters) {
+            for (let info in this.charactersList) {
+
                 if (info == 'info') {
                     nextUrl = info
                 }
@@ -187,43 +152,111 @@ export const useCharacterStore = defineStore('character', {
         },
         setPrevPageURL() {
             let url = <any>{}
-            for (let info in this.characters) {
+            for (let info in this.charactersList) {
                 if (info == 'info') {
                     url = info
                 }
             }
             return this.prevPageURL = url
-        }
+        },
+        setSelectedParam(inputValue: string): string {
+            return this.queryParam = inputValue
+        },
+        setTextSearch(text: string) {
+            return this.text = text
+        },
+        addFavorite(hero: Hero) {
+            try {
+                return this.favoriteHeroList.push({ ...hero })
+            } catch (error) {
+                return console.error(error)
+            }
+        },
+        checkIfExistHeroOnFavorite(hero: Hero): boolean {
+            let listFavHero = [ ...this.getFavoriteHeroList ]
+            let heroId = hero.id
+            let canAdd = false
+            if (!listFavHero.length)
+                canAdd = true
+            for (const element of listFavHero) {
+                console.log('list', listFavHero)
+                if (element.id != heroId) {
+                    canAdd = true
+                } else {
+                    return canAdd = false
+                }
+            }
+            return canAdd
+        },
+        removeFromFavorite(heroId: Hero) {
+            this.favoriteHeroList = this.getFavoriteHeroList.filter((e, index) => e.id != heroId.id)
+        },
+        favoriteActions(hero: Hero) {
+            let canAdd = this.checkIfExistHeroOnFavorite(hero)
+            if (canAdd) {
+                this.addFavorite(hero)
+            } else {
+                this.removeFromFavorite(hero)
+            }
+        },
+        async retrieveSelectedCharacter() {
+            const charID = localStorage?.getItem('charID')
+            if (charID !== null && this.character.id == undefined) {
+                console.log('recupera if')
+                await this.fetchCharacterById(Number(charID))
+            }
+        },
     }
 })
 
-export interface Response {
+export interface Info {
     info: {
         "count": number,
         "pages": number,
         "next": string | null,
         "prev": string | null
     },
-    results: {
-        "id": number,
-        "name": string,
-        "status": string,
-        "species": string,
-        "type": string,
-        "gender": string,
-        "origin": {
-            "name": string,
-            "url": string
-        },
-        "location": {
-            "name": string,
-            "url": string
-        },
-        "image": string,
-        "episode": [ string
+}
+export interface Results {
+    "id": number,
+    "name": string,
+    "status": string,
+    "species": string,
+    "type": string,
+    "gender": string,
+    "origin": Origin,
+    "location": Location,
+    "image": string,
+    "episode": [ Episode ],
+    "url": string,
+    "created": string
+}
+export interface Response extends Info, Results {
+}
 
-        ],
-        "url": string,
-        "created": string
-    }
+export interface Hero extends Results {
+}
+
+export interface Character {
+    id: number,
+    name: string,
+    image: string,
+    type: string,
+    status: string,
+    episode: [ Episode ]
+}
+
+export interface Episode {
+    name: string,
+    url: string
+}
+
+export interface Location {
+    name: string,
+    url: string
+}
+
+export interface Origin {
+    name: string,
+    url: string
 }

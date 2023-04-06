@@ -3,15 +3,16 @@ import { defineStore } from 'pinia'
 
 export const useOwnHeroStore = defineStore('own-hero', {
     state: () => ({
-        heros: [ { imageURL: '', name: '', gender: '' } ],
-        heroFavorite: [ { imageURL: '', name: '', gender: '' } ]
+        heros: [] as Hero[],
+        favoriteHero: [] as Hero[]
     }),
     getters: {
         getListHero(state) {
+            console.log('getters heros', state.heros)
             return state.heros
         },
-        getHeroFavorite(state) {
-            return state.heroFavorite
+        getFavoriteHero(state) {
+            return state.favoriteHero
         }
     },
     actions: {
@@ -20,19 +21,18 @@ export const useOwnHeroStore = defineStore('own-hero', {
         },
 
         addFavorite(hero: Hero) {
-            this.heroFavorite.push({ ...hero })
-            this.saveStateFavoriteHero(hero)
+            if (this.checkIfExistHero(hero)) {
+                this.favoriteHero.push({ ...hero })
+            } else {
+                console.log('já existe carai')
+            }
         },
+        checkIfExistHero(hero: Hero) {
+            let heroName = hero.name
+            if (this.favoriteHero.length > 0) {
 
-        saveStateFavoriteHero(hero: object) {
-            sessionStorage.setItem('favoriteHero', JSON.stringify(hero))
-
-        },
-        retrieveStateFavoriteHero() {
-            let key: any = localStorage.getItem('favorite')
-            let favorite: any = JSON.parse(key)
-            this.heroFavorite.push({ ...favorite })
-            console.log('favorite', favorite)
+            }
+            return true
         }
     }
 })

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue"
+import { useCharacterStore } from '@/stores/character'
+let store = useCharacterStore()
+store.getAllOrFiltredResult()
 
 const HomeComponent = defineAsyncComponent({
   loader: () => import("../components/organism/OrganismHome.vue")
@@ -9,6 +12,6 @@ const HomeComponent = defineAsyncComponent({
 
 <template>
   <section>
-      <HomeComponent />
+    <HomeComponent />
   </section>
 </template>

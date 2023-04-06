@@ -5,7 +5,7 @@
             <SearchInput />
         </header>
         <section class="grid grid-cols-2 md:grid-cols-2 gap-4 py-4">
-            <CardComponent />
+            <CardHomeList :hero-list="heroList" />
         </section>
         <footer class="py-4">
             <Pagination />
@@ -15,7 +15,10 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+import { useCharacterStore } from '@/stores/character'
+const store = useCharacterStore()
 
+const heroList = store.getCharactersList
 const Pagination = defineAsyncComponent({
     loader: () => import("../molecules/Pagination.vue")
 })
@@ -25,6 +28,6 @@ const SelectSearchOption = defineAsyncComponent({
 const SearchInput = defineAsyncComponent({
     loader: () => import("../molecules/SearchInput.vue")
 })
-const CardComponent = defineAsyncComponent({ loader: () => import("../molecules/Card.vue") })
+const CardHomeList = defineAsyncComponent({ loader: () => import("../molecules/Card.vue") })
 
 </script>
