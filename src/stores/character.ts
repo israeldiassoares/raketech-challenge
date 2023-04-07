@@ -97,15 +97,15 @@ export const useCharacterStore = defineStore('character', {
                 this.loading = false
             }
         },
+        //TODO NEED TO RETHINK about this logic
         async getNextPageData() {
             console.log('getNextPAge', this.nextPageURL)
             try {
-                if (this.nextPageURL !== null) {
-                    let nextPageDate = await fetch(`${this.nextPageURL}`).then(response => response.json())
-                    this.setNextPageURL()
-                    this.setPrevPageURL()
-                    this.charactersList = nextPageDate
-                }
+                debugger
+                let nextPageDate = await fetch(`${this.nextPageURL}`).then(response => response.json())
+                this.setNextPageURL()
+                this.setPrevPageURL()
+                this.response = nextPageDate
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -119,7 +119,7 @@ export const useCharacterStore = defineStore('character', {
                     let prevPageDate = await fetch(`${this.prevPageURL}`).then(response => response.json())
                     this.setNextPageURL()
                     this.setPrevPageURL()
-                    this.charactersList = prevPageDate
+                    this.response = prevPageDate
                 }
             } catch (error: any) {
                 this.error = error
@@ -128,21 +128,28 @@ export const useCharacterStore = defineStore('character', {
             }
         },
         setQuantityPage() {
-
+            let pages: any
+            for (let info in this.charactersList) {
+                if (info == 'info') {
+                    pages = info
+                }
+            }
+            return this.pages = Number(pages.pages)
         },
         setNextPageURL() {
+            console.log('opaaa')
             let nextUrl = <any>{}
-            for (let info in this.charactersList) {
-
+            for (let info in this.response) {
                 if (info == 'info') {
                     nextUrl = info
                 }
             }
+            console.log(this.response)
             return this.nextPageURL = nextUrl
         },
         setPrevPageURL() {
             let url = <any>{}
-            for (let info in this.charactersList) {
+            for (let info in this.response) {
                 if (info == 'info') {
                     url = info
                 }
