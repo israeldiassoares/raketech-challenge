@@ -1,4 +1,4 @@
-import { defineStore, storeToRefs } from 'pinia'
+import { defineStore } from 'pinia'
 
 export default interface CharacterObject {
     info: {},
@@ -8,16 +8,17 @@ const BASE_URL = 'https://rickandmortyapi.com/api'
 
 export const useCharacterStore = defineStore('character', {
     state: () => ({
-        charactersList: [] as Response[],
+        charactersList: [] as Characters[],
         character: {} as Character,
         queryParam: '',
-        text: '',
+        textSearch: '',
         pages: 0,
         nextPageURL: '' || null,
         prevPageURL: '' || null,
         loading: false,
         error: String,
-        favoriteHeroList: [] as Hero[]
+        favoriteHeroList: [] as Hero[],
+        response: {} as Response
     }),
     getters: {
         getCharactersList: (state) => {
@@ -50,7 +51,7 @@ export const useCharacterStore = defineStore('character', {
             return state.character
         },
         getQuantityPage(state) {
-            return state.pages
+            return state.charactersList
         },
         getFavoriteHeroList(state) {
             return state.favoriteHeroList
@@ -59,21 +60,16 @@ export const useCharacterStore = defineStore('character', {
     actions: {
         async getAllOrFiltredResult() {
             let regexText = '/([aA-zZ])\w+/g'
-            if (this.queryParam.match(regexText) && this.text.match(regexText)) {
-
+            if (this.queryParam.match(regexText) && this.textSearch.match(regexText)) {
                 await this.getFilteredCharacter()
             } else {
                 await this.fetchCharacters()
             }
-            this.setQuantityPage()
         },
         async fetchCharacters(): Promise<void> {
             this.loading = true
             try {
                 this.charactersList = await fetch(`${BASE_URL}/character`).then(response => response.json())
-
-                this.setNextPageURL()
-                this.setPrevPageURL()
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -94,7 +90,7 @@ export const useCharacterStore = defineStore('character', {
         async getFilteredCharacter() {
             this.loading = true
             try {
-                this.charactersList = await fetch(`${BASE_URL}/character/?${this.queryParam}=${this.text}`).then(response => response.json())
+                this.charactersList = await fetch(`${BASE_URL}/character/?${this.queryParam}=${this.textSearch}`).then(response => response.json())
             } catch (error: any) {
                 this.error = error
             } finally {
@@ -132,13 +128,7 @@ export const useCharacterStore = defineStore('character', {
             }
         },
         setQuantityPage() {
-            let pages: any
-            for (let info in this.charactersList) {
-                if (info == 'info') {
-                    pages = info
-                }
-            }
-            return this.pages = Number(pages.pages)
+
         },
         setNextPageURL() {
             let nextUrl = <any>{}
@@ -162,8 +152,8 @@ export const useCharacterStore = defineStore('character', {
         setSelectedParam(inputValue: string): string {
             return this.queryParam = inputValue
         },
-        setTextSearch(text: string) {
-            return this.text = text
+        setTextSearch(textSearch: string) {
+            return this.textSearch = textSearch
         },
         addFavorite(hero: Hero) {
             try {
@@ -210,14 +200,12 @@ export const useCharacterStore = defineStore('character', {
 })
 
 export interface Info {
-    info: {
-        "count": number,
-        "pages": number,
-        "next": string | null,
-        "prev": string | null
-    },
+    "count": number,
+    "pages": number,
+    "next": string | null,
+    "prev": string | null
 }
-export interface Results {
+export interface Characters {
     "id": number,
     "name": string,
     "status": string,
@@ -231,10 +219,10 @@ export interface Results {
     "url": string,
     "created": string
 }
-export interface Response extends Info, Results {
+export interface Response extends Info, Characters {
 }
 
-export interface Hero extends Results {
+export interface Hero extends Characters {
 }
 
 export interface Character {
