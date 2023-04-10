@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onUpdated } from 'vue'
 import { useCharacterStore } from '@/stores/character'
 
 
@@ -23,6 +23,9 @@ const CardFavoriteHero = defineAsyncComponent({
 })
 
 const store = useCharacterStore()
-
+onUpdated(() => {
+    store.setFavHeroFromCache()
+})
+store.getFavHeroFromCache()
 
 </script>

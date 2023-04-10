@@ -164,10 +164,22 @@ export const useCharacterStore = defineStore('character', {
         },
         addFavorite(hero: Hero) {
             try {
-                return this.favoriteHeroList.push({ ...hero })
+                return [ this.favoriteHeroList.push({ ...hero }), this.setFavHeroFromCache() ]
+
             } catch (error) {
                 return console.error(error)
             }
+        },
+        retrieveFavoriteHero() {
+            let retrievedHero = localStorage.getItem('favHero') as string
+            let deveSerArray = JSON.parse(retrievedHero)
+            this.favoriteHeroList = deveSerArray
+        },
+        setFavHeroFromCache() {
+            localStorage.setItem('favHero', JSON.stringify(this.favoriteHeroList))
+        },
+        getFavHeroFromCache() {
+            this.retrieveFavoriteHero()
         },
         checkIfExistHeroOnFavorite(hero: Hero): boolean {
             let listFavHero = [ ...this.getFavoriteHeroList ]
