@@ -1,10 +1,13 @@
 //TODO Card receive props from component superior to become reusable
 <template>
     <template
-        v-for="                 character                  in heroList"
-        :key="character.id"
+        v-for="(     character, index     )                       in heroList"
+        key="index"
     >
-        <div class="bg-green grid grid-cols-2 overflow-hidden max-w-44 border-2 border-green-700 dark:border-green-500 rounded-lg overflow-hide ">
+        <div
+            class="hero-card bg-green grid grid-cols-2 overflow-hidden max-w-44 border-2 border-green-700 dark:border-green-500 rounded-lg overflow-hide "
+            :id="String(index)"
+        >
             <a
                 @click="cardSelected(character.id)"
                 class="flex col-span-2 cursor-pointer"

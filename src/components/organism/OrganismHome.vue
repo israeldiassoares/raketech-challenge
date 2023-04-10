@@ -4,7 +4,10 @@
             <SelectSearchOption />
             <SearchInput />
         </header>
-        <section class="grid grid-cols-2 md:grid-cols-2 gap-4 py-4">
+        <section
+            id="hero-card-list"
+            class="grid grid-cols-2 md:grid-cols-2 gap-4 py-4"
+        >
             <CardHomeList :hero-list="heroList" />
         </section>
         <footer class="py-4">
