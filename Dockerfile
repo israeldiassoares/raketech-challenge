@@ -8,5 +8,5 @@ RUN npm run build
 
 FROM nginx:latest
 VOLUME /var/cache/nginx
-COPY --from=rickMortyVue app/dist/raketech-challenge /usr/share/nginx/html
+COPY --from=rickMortyVue app/dist/rick-morty-vue3-ts /usr/share/nginx/html
 COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
